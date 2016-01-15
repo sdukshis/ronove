@@ -35,25 +35,37 @@ private:
 
     void on_stop() override
     {
-        std::clog << "Stop rrequested" << std::endl;
+        std::clog << "Stop requested" << std::endl;
         running = false;
+    }
+
+    void on_reconfigure() override
+    {
+        std::clog << "Reconfigure requested" << std::endl;
+
     }
 
     std::atomic_bool running;
 };
 
-int main(int argc, char *argv[]) try {
-    if (argc < 2) {
-        throw std::invalid_argument("Usage: timer [0|1]");
+int main(int argc, char *argv[])
+{
+    try {
+        if (argc < 2) {
+            throw std::invalid_argument("Usage: timer [0|1]");
+        }
+        bool background = std::stoi(argv[1]);
+        Timer timer;
+        return timer.run(background);
+    } catch (const std::system_error &e) {
+        std::cerr << "Error: " << e.code() << ", Message: " << e.what()
+                  << std::endl;
+        return EXIT_FAILURE;
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    } catch (...) {
+        std::cerr << "Unknonwn error" << std::endl;
+        return EXIT_FAILURE;
     }
-    bool background = std::stoi(argv[1]);
-    Timer timer;
-    return timer.run(background);
-} catch (const std::system_error &e) {
-    std::cerr << "Error: " << e.code() << ", Message: " << e.what()
-              << std::endl;
-} catch (const std::exception &e) {
-    std::cerr << "Error: " << e.what() << std::endl;
-} catch (...) {
-    std::cerr << "Unknonwn error" << std::endl;
 }

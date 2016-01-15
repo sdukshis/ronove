@@ -27,6 +27,14 @@ private:
     bool running;
     std::string name_;
     std::thread app_thread;
+#ifdef _WIN32
+    static Daemon* instance = nullptr;
+    static SERVICE_STATUS service_status;
+    static SERVICE_STATUS_HANDLE service_status_handle;
+    static void service_main(DWORD, LPTSTR*);
+    static void service_ctrl_handler(DWORD);
+    static BOOL console_ctrl_handler(DWORD);
+#endif
 };
 
 }
