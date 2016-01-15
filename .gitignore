@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# All build files
+build/*
+
+# Sublime-workspace
+ronove.sublime-workspace
